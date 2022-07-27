@@ -1,0 +1,30 @@
+{
+  "name": "@aheadlabs/ngx-toolset",
+  "version": "0.1.0",
+  "description": "Opinionated Angular library that contains common tools and patterns to simplify things and reuse code.",
+  "main": "src/public-api.ts",
+  "scripts": {
+    "test": "src/test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aheadlabs/ngx-toolset.git"
+  },
+  "keywords": [
+    "angular",
+    "toolset"
+  ],
+  "author": "Ahead Labs, S.L.",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/aheadlabs/ngx-toolset/issues"
+  },
+  "homepage": "https://github.com/aheadlabs/ngx-toolset#readme",
+  "peerDependencies": {
+    "@angular/common": "^14.1.0",
+    "@angular/core": "^14.1.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
