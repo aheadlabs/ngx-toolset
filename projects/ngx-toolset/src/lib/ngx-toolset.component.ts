@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'lib-ngx-toolset',
@@ -10,11 +10,8 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class NgxToolsetComponent implements OnInit {
+export class NgxToolsetComponent {
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  constructor() { /* Constructor is empty temporarily */  }
 
 }
