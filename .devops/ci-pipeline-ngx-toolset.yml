@@ -1,0 +1,148 @@
+trigger:
+  batch: true
+  branches:
+    include:
+      - main
+      - dev
+      - feature/*
+      - hotfix/*
+      - release/*
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+name: CI-$(date:yyyyMMdd)$(rev:.r)
+
+jobs:
+  - job: Main
+    displayName: Main job
+    variables:
+      - group: npm
+      - group: sonarcloud
+      - name: TestOutputDirectory
+        value: $(Agent.TempDirectory)/testresults
+    steps:
+      # Set runtime versions
+      - task: UsePythonVersion@0
+        displayName: 'Set Python version'
+        inputs:
+          versionSpec: '>=3.10'
+          addToPath: true
+          architecture: 'x64'
+      - task: UseDotNet@2
+        displayName: Set .NET version
+        inputs:
+          packageType: 'sdk'
+          version: '6.x'
+      # Install tools and packages and kick off
+      - task: CmdLine@2
+        displayName: 'Install devops-toolset'
+        inputs:
+          script: "pip install devops-toolset"
+#      - task: PythonScript@0
+#        displayName: 'Pipeline kick off'
+#        inputs:
+#          scriptSource: 'inline'
+#          script: |
+#            import devops_toolset.project_types.dotnet.ci_pipeline_kickoff
+#            devops_toolset.project_types.dotnet.ci_pipeline_kickoff.main("azuredevops", "$(Build.SourcesDirectory)/0.DistributedServicesLayer/SignatusApi/SignatusApi.csproj", "$(Build.SourceBranch)", ["dev", "main"], False)
+#      # Build and tests
+#      - task: DotNetCoreCLI@2
+#        displayName: Restore
+#        inputs:
+#          command: 'restore'
+#          projects: '**/*.csproj'
+#          feedsToUse: 'config'
+#          nugetConfigPath: 'NuGet.config'
+#      - task: SonarCloudPrepare@1
+#        displayName: SonarCloud prepare analysis
+#        inputs:
+#          SonarCloud: 'SonarCloud Ahead Labs'
+#          organization: 'ahead-labs'
+#          scannerMode: 'MSBuild'
+#          projectKey: 'aheadlabs_Signatus'
+#          projectName: 'Signatus'
+#          projectVersion: '$(DT_PROJECT_VERSION)'
+#          extraProperties: |
+#            sonar.cs.vscoveragexml.reportsPaths=$(Agent.TempDirectory)/testresults/coverage.xml
+#            sonar.exclusions=3.PersistenceInfrastructureLayer/**/*
+#      - task: DotNetCoreCLI@2
+#        displayName: Build
+#        inputs:
+#          command: 'build'
+#          projects: '**/*.csproj'
+#      - task: DotNetCoreCLI@2
+#        displayName: Unit tests
+#        inputs:
+#          command: 'test'
+#          projects: '**/*[Tt]ests/*.csproj'
+#          arguments: '--configuration $(BuildConfiguration) --logger trx --collect:"XPlat Code Coverage" --results-directory $(TestOutputDirectory)'
+#          publishTestResults: false
+#      - task: CmdLine@2
+#        displayName: Generate compatible reports for SonarCloud
+#        inputs:
+#          script: |
+#            dotnet tool install --global dotnet-reportgenerator-globaltool
+#            reportgenerator "-reports:$(TestOutputDirectory)/*/coverage.cobertura.xml" "-targetdir:$(TestOutputDirectory)/mergedcoveragereport" "-reporttypes:Cobertura;SonarQube" "-assemblyfilters -*Tests*;-*Data,-*DataModel"
+#      # TODO Migrate to dotnet-coverage => https://docs.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage
+#      - task: PublishCodeCoverageResults@1
+#        displayName: 'Publish unit tests code coverage results'
+#        inputs:
+#          codeCoverageTool: 'Cobertura'
+#          summaryFileLocation: '$(TestOutputDirectory)/mergedcoveragereport/Cobertura.xml'
+#      - task: SonarCloudAnalyze@1
+#        displayName: SonarCloud analyze
+#      - task: SonarCloudPublish@1
+#        displayName: SonarCloud publish quality gate results
+#        inputs:
+#          pollingTimeoutSec: '300'
+#      - task: PythonScript@0
+#        displayName: 'Get SonarCloud Quality Gate results'
+#        inputs:
+#          scriptSource: 'inline'
+#          script: |
+#            import devops_toolset.devops_platforms.sonarx as sonarx
+#            sonarx.get_project_quality_gate_status('$(SONARCLOUD_URL)', 'aheadlabs_Signatus', '$(SONARQUBE_TOKEN)', '$(DT_CURRENT_BRANCH_SIMPLIFIED)')
+#          failOnStderr: true
+#      # Tag version on git
+#      - task: CmdLine@2
+#        displayName: Add identity to git tagging operation
+#        inputs:
+#          script: |
+#            git config --global user.email "aheadlabs@gmail.com"
+#            git config --global user.name "Devops Toolset"
+#      - task: PythonScript@0
+#        displayName: 'Tag version on git (if needed)'
+#        inputs:
+#          scriptSource: 'inline'
+#          script: |
+#            import devops_toolset.project_types.dotnet.utils as dotnet_utils
+#            dotnet_utils.git_tag('$(Build.SourceVersion)', '$(DT_PROJECT_VERSION)', '$(DT_CURRENT_BRANCH_SIMPLIFIED)', 'basic $(Repository.Access.Token)')
+#          failOnStderr: true
+#      # Publish artifacts
+#      - task: DotNetCoreCLI@2
+#        displayName: 'Publish'
+#        inputs:
+#          command: 'publish'
+#          publishWebProjects: false
+#          projects: '**/*.csproj'
+#          arguments: '-c Release --output $(build.artifactstagingdirectory)/signatus -r linux-x64 --self-contained false'
+#          modifyOutputPath: false
+#          zipAfterPublish: false
+#      - task: PublishBuildArtifacts@1
+#        displayName: 'Publish API bin artifacts to Azure Pipelines'
+#        inputs:
+#          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#          ArtifactName: 'SignatusApiArtifact'
+#          publishLocation: 'Container'
+#      - task: PublishBuildArtifacts@1
+#        displayName: 'Publish SQL migrations artifacts to Azure Pipelines'
+#        condition: eq(variables['DT_SUITABLE_BRANCH_FOR_MIGRATIONS'], 'True')
+#        inputs:
+#          PathtoPublish: "$(Agent.TempDirectory)/migrations/"
+#          ArtifactName: "SqlMigrationsArtifact"
+#          publishLocation: "Container"
