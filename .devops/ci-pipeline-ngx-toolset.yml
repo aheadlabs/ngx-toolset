@@ -70,10 +70,10 @@ jobs:
         displayName: 'Build'
         inputs:
           script: 'npm run build-library'
-      - task: CmdLine@2
-        displayName: 'Test'
-        inputs:
-          script: 'ng test --code-coverage --watch false'
+#      - task: CmdLine@2
+#        displayName: 'Test'
+#        inputs:
+#          script: 'ng test --code-coverage --watch false'
       - task: SonarCloudAnalyze@1
         displayName: 'Run SonarCloud analysis'
       - task: SonarCloudPublish@1
@@ -104,25 +104,9 @@ jobs:
 #            dotnet_utils.git_tag('$(Build.SourceVersion)', '$(DT_PROJECT_VERSION)', '$(DT_CURRENT_BRANCH_SIMPLIFIED)', 'basic $(Repository.Access.Token)')
 #          failOnStderr: true
 #      # Publish artifacts
-#      - task: DotNetCoreCLI@2
-#        displayName: 'Publish'
-#        inputs:
-#          command: 'publish'
-#          publishWebProjects: false
-#          projects: '**/*.csproj'
-#          arguments: '-c Release --output $(build.artifactstagingdirectory)/signatus -r linux-x64 --self-contained false'
-#          modifyOutputPath: false
-#          zipAfterPublish: false
-#      - task: PublishBuildArtifacts@1
-#        displayName: 'Publish API bin artifacts to Azure Pipelines'
-#        inputs:
-#          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-#          ArtifactName: 'SignatusApiArtifact'
-#          publishLocation: 'Container'
-#      - task: PublishBuildArtifacts@1
-#        displayName: 'Publish SQL migrations artifacts to Azure Pipelines'
-#        condition: eq(variables['DT_SUITABLE_BRANCH_FOR_MIGRATIONS'], 'True')
-#        inputs:
-#          PathtoPublish: "$(Agent.TempDirectory)/migrations/"
-#          ArtifactName: "SqlMigrationsArtifact"
-#          publishLocation: "Container"
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish artifact to Azure Pipelines'
+        inputs:
+          PathtoPublish: "$(Build.SourcesDirectory)/dist/"
+          ArtifactName: "AngularArtifact"
+          publishLocation: "Container"
