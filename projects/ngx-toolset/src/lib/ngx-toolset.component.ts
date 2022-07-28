@@ -12,9 +12,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NgxToolsetComponent implements OnInit {
 
-  constructor() { }
+  constructor() { /* Constructor is empty temporarily */  }
 
   ngOnInit(): void {
+    // This method is empty temporarily
+
   }
 
 }

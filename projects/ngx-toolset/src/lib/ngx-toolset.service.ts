@@ -5,5 +5,5 @@ import { Injectable } from '@angular/core';
 })
 export class NgxToolsetService {
 
-  constructor() { }
+  constructor() { /* Constructor is empty temporarily */  }
 }
