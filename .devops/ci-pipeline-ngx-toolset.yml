@@ -64,7 +64,7 @@ jobs:
           scannerMode: 'CLI'
           configMode: 'file'
           configFile: '.devops/sonar-project.properties'
-          projectVersion: '0.0.1'
+          projectVersion: '0.0.1' # TODO Replace by $(DT_PROJECT_VERSION) after kick off execution
           extraProperties:
       - task: CmdLine@2
         displayName: 'Build'
