@@ -39,6 +39,7 @@ jobs:
         inputs:
           script: |
             npm install --force
+            npm install -g @angular/cli
       # - task: CmdLine@2
       #   displayName: 'Install devops-toolset'
       #   inputs:
@@ -79,55 +80,6 @@ jobs:
         displayName: 'Publish quality gate result'
         inputs:
           pollingTimeoutSec: '300'
-#      - task: DotNetCoreCLI@2
-#        displayName: Restore
-#        inputs:
-#          command: 'restore'
-#          projects: '**/*.csproj'
-#          feedsToUse: 'config'
-#          nugetConfigPath: 'NuGet.config'
-#      - task: SonarCloudPrepare@1
-#        displayName: SonarCloud prepare analysis
-#        inputs:
-#          SonarCloud: 'SonarCloud Ahead Labs'
-#          organization: 'ahead-labs'
-#          scannerMode: 'MSBuild'
-#          projectKey: 'aheadlabs_Signatus'
-#          projectName: 'Signatus'
-#          projectVersion: '$(DT_PROJECT_VERSION)'
-#          extraProperties: |
-#            sonar.cs.vscoveragexml.reportsPaths=$(Agent.TempDirectory)/testresults/coverage.xml
-#            sonar.exclusions=3.PersistenceInfrastructureLayer/**/*
-#      - task: DotNetCoreCLI@2
-#        displayName: Build
-#        inputs:
-#          command: 'build'
-#          projects: '**/*.csproj'
-#      - task: DotNetCoreCLI@2
-#        displayName: Unit tests
-#        inputs:
-#          command: 'test'
-#          projects: '**/*[Tt]ests/*.csproj'
-#          arguments: '--configuration $(BuildConfiguration) --logger trx --collect:"XPlat Code Coverage" --results-directory $(TestOutputDirectory)'
-#          publishTestResults: false
-#      - task: CmdLine@2
-#        displayName: Generate compatible reports for SonarCloud
-#        inputs:
-#          script: |
-#            dotnet tool install --global dotnet-reportgenerator-globaltool
-#            reportgenerator "-reports:$(TestOutputDirectory)/*/coverage.cobertura.xml" "-targetdir:$(TestOutputDirectory)/mergedcoveragereport" "-reporttypes:Cobertura;SonarQube" "-assemblyfilters -*Tests*;-*Data,-*DataModel"
-#      # TODO Migrate to dotnet-coverage => https://docs.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage
-#      - task: PublishCodeCoverageResults@1
-#        displayName: 'Publish unit tests code coverage results'
-#        inputs:
-#          codeCoverageTool: 'Cobertura'
-#          summaryFileLocation: '$(TestOutputDirectory)/mergedcoveragereport/Cobertura.xml'
-#      - task: SonarCloudAnalyze@1
-#        displayName: SonarCloud analyze
-#      - task: SonarCloudPublish@1
-#        displayName: SonarCloud publish quality gate results
-#        inputs:
-#          pollingTimeoutSec: '300'
 #      - task: PythonScript@0
 #        displayName: 'Get SonarCloud Quality Gate results'
 #        inputs:
