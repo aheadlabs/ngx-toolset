@@ -33,12 +33,12 @@ jobs:
           versionSpec: '>=3.10'
           addToPath: true
           architecture: 'x64'
-      - task: UseDotNet@2
-        displayName: Set .NET version
-        inputs:
-          packageType: 'sdk'
-          version: '6.x'
       # Install tools and packages and kick off
+      - task: CmdLine@2
+        displayName: 'npm install'
+        inputs:
+          script: |
+            npm install
       - task: CmdLine@2
         displayName: 'Install devops-toolset'
         inputs:
@@ -50,7 +50,13 @@ jobs:
 #          script: |
 #            import devops_toolset.project_types.dotnet.ci_pipeline_kickoff
 #            devops_toolset.project_types.dotnet.ci_pipeline_kickoff.main("azuredevops", "$(Build.SourcesDirectory)/0.DistributedServicesLayer/SignatusApi/SignatusApi.csproj", "$(Build.SourceBranch)", ["dev", "main"], False)
-#      # Build and tests
+      # Build and tests
+      - task: CmdLine@2
+        displayName: 'Build'
+        inputs:
+          script: |
+            pwd
+            npm run build-library
 #      - task: DotNetCoreCLI@2
 #        displayName: Restore
 #        inputs:
