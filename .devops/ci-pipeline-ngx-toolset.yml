@@ -40,17 +40,11 @@ jobs:
           script: |
             npm install --force
             npm install -g @angular/cli
-      # - task: CmdLine@2
-      #   displayName: 'Install devops-toolset'
-      #   inputs:
-      #     script: "pip install devops-toolset"
-#      - task: PythonScript@0
-#        displayName: 'Pipeline kick off'
-#        inputs:
-#          scriptSource: 'inline'
-#          script: |
-#            import devops_toolset.project_types.dotnet.ci_pipeline_kickoff
-#            devops_toolset.project_types.dotnet.ci_pipeline_kickoff.main("azuredevops", "$(Build.SourcesDirectory)/0.DistributedServicesLayer/SignatusApi/SignatusApi.csproj", "$(Build.SourceBranch)", ["dev", "main"], False)
+      - task: CmdLine@2
+        displayName: 'Install devops-toolset'
+        inputs:
+          script: "pip install devops-toolset"
+      # TODO kick off
       # Build and tests
       - task: CmdLine@2
         displayName: 'Lint'
@@ -74,35 +68,15 @@ jobs:
 #        displayName: 'Test'
 #        inputs:
 #          script: 'ng test --code-coverage --watch false'
+        # TODO Unit tests and coverage report
       - task: SonarCloudAnalyze@1
         displayName: 'Run SonarCloud analysis'
       - task: SonarCloudPublish@1
         displayName: 'Publish quality gate result'
         inputs:
           pollingTimeoutSec: '300'
-#      - task: PythonScript@0
-#        displayName: 'Get SonarCloud Quality Gate results'
-#        inputs:
-#          scriptSource: 'inline'
-#          script: |
-#            import devops_toolset.devops_platforms.sonarx as sonarx
-#            sonarx.get_project_quality_gate_status('$(SONARCLOUD_URL)', 'aheadlabs_Signatus', '$(SONARQUBE_TOKEN)', '$(DT_CURRENT_BRANCH_SIMPLIFIED)')
-#          failOnStderr: true
-#      # Tag version on git
-#      - task: CmdLine@2
-#        displayName: Add identity to git tagging operation
-#        inputs:
-#          script: |
-#            git config --global user.email "aheadlabs@gmail.com"
-#            git config --global user.name "Devops Toolset"
-#      - task: PythonScript@0
-#        displayName: 'Tag version on git (if needed)'
-#        inputs:
-#          scriptSource: 'inline'
-#          script: |
-#            import devops_toolset.project_types.dotnet.utils as dotnet_utils
-#            dotnet_utils.git_tag('$(Build.SourceVersion)', '$(DT_PROJECT_VERSION)', '$(DT_CURRENT_BRANCH_SIMPLIFIED)', 'basic $(Repository.Access.Token)')
-#          failOnStderr: true
+        # TODO Get quality gate results
+        # TODO Auto tagging
 #      # Publish artifacts
       - task: PublishBuildArtifacts@1
         displayName: 'Publish artifact to Azure Pipelines'
