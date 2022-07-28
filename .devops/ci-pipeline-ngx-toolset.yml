@@ -35,14 +35,14 @@ jobs:
           architecture: 'x64'
       # Install tools and packages and kick off
       - task: CmdLine@2
-        displayName: 'npm install'
+        displayName: 'npm tools and packages installation'
         inputs:
           script: |
-            npm install
-      - task: CmdLine@2
-        displayName: 'Install devops-toolset'
-        inputs:
-          script: "pip install devops-toolset"
+            npm install --force
+      # - task: CmdLine@2
+      #   displayName: 'Install devops-toolset'
+      #   inputs:
+      #     script: "pip install devops-toolset"
 #      - task: PythonScript@0
 #        displayName: 'Pipeline kick off'
 #        inputs:
@@ -51,12 +51,26 @@ jobs:
 #            import devops_toolset.project_types.dotnet.ci_pipeline_kickoff
 #            devops_toolset.project_types.dotnet.ci_pipeline_kickoff.main("azuredevops", "$(Build.SourcesDirectory)/0.DistributedServicesLayer/SignatusApi/SignatusApi.csproj", "$(Build.SourceBranch)", ["dev", "main"], False)
       # Build and tests
+      - task: SonarCloudPrepare@1
+        displayName: 'Prepare SonarCloud analysis'
+        inputs:
+          SonarCloud: 'SonarCloud'
+          organization: 'ahead-labs'
+          scannerMode: 'CLI'
+          configMode: 'file'
+          configFile: '.devops/sonar-project.properties'
+          extraProperties: 
       - task: CmdLine@2
         displayName: 'Build'
         inputs:
           script: |
-            pwd
             npm run build-library
+      - task: SonarCloudAnalyze@1
+        displayName: 'Run SonarCloud analysis'
+      - task: SonarCloudPublish@1
+        displayName: 'Publish quality gate result'
+        inputs:
+          pollingTimeoutSec: '300'
 #      - task: DotNetCoreCLI@2
 #        displayName: Restore
 #        inputs:
