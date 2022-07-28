@@ -51,6 +51,10 @@ jobs:
 #            import devops_toolset.project_types.dotnet.ci_pipeline_kickoff
 #            devops_toolset.project_types.dotnet.ci_pipeline_kickoff.main("azuredevops", "$(Build.SourcesDirectory)/0.DistributedServicesLayer/SignatusApi/SignatusApi.csproj", "$(Build.SourceBranch)", ["dev", "main"], False)
       # Build and tests
+      - task: CmdLine@2
+        displayName: 'Lint'
+        inputs:
+          script: 'ng lint'
       - task: SonarCloudPrepare@1
         displayName: 'Prepare SonarCloud analysis'
         inputs:
@@ -64,8 +68,11 @@ jobs:
       - task: CmdLine@2
         displayName: 'Build'
         inputs:
-          script: |
-            npm run build-library
+          script: 'npm run build-library'
+      - task: CmdLine@2
+        displayName: 'Test'
+        inputs:
+          script: 'ng test --code-coverage --watch false'
       - task: SonarCloudAnalyze@1
         displayName: 'Run SonarCloud analysis'
       - task: SonarCloudPublish@1
