@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-library": "ng build ngx-toolset && npm run copy-library-npmrc-to-dist",
+    "copy-library-npmrc-to-dist": "cp projects/ngx-toolset/.npmrc dist/ngx-toolset/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

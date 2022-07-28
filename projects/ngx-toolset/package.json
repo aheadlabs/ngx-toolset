@@ -1,9 +1,11 @@
 {
   "name": "@aheadlabs/ngx-toolset",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Opinionated Angular library that contains common tools and patterns to simplify things and reuse code.",
   "main": "src/public-api.ts",
   "scripts": {
+    "copy-npmrc-to-dist": "cp .npmrc ../../dist/ngx-toolset/",
+    "build": "ng build && npm run copy-npmrc-to-dist",
     "test": "src/test.ts"
   },
   "repository": {
