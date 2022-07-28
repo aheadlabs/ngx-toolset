@@ -55,6 +55,7 @@ jobs:
         displayName: 'Prepare SonarCloud analysis'
         inputs:
           SonarCloud: 'SonarCloud'
+          organization: 'ahead-labs'
           scannerMode: 'CLI'
           configMode: 'file'
           configFile: '.devops/sonar-project.properties'
