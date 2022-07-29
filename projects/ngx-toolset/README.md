@@ -11,6 +11,7 @@ This file in `projects/ngx-toolset` contains configuration information for the n
 
 In order to authenticate against npm you would need a valid token in an environment variable called NPM_TOKEN. That way npm CLI will find it through the .npmrc file.
 
+
 ### Code scaffolding
 To add a new component run `ng generate component component-name --project ngx-toolset` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-toolset`.
 > Note: Don't forget to add `--project ngx-toolset` or else it will be added to the default project in your `angular.json` file. 
@@ -28,6 +29,7 @@ Run `npm run build-library` to build the project and copy the .npmrc file to the
 #### From library root
 Run `npm run build` to build the project and copy the .npmrc file to the `/dist/` directory.
 
+
 ## Publishing
 After building your library with `ng build ngx-toolset`, go to the dist folder `cd dist/ngx-toolset` and run `npm publish`.
 
@@ -35,6 +37,12 @@ Please, refer to the [.npmrc file section](#npmrc-file) earlier in this document
 
 ## Running unit tests
 Run `ng test ngx-toolset` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Troubleshooting
+
+| Problem                                                                                                                                                                                              | Solution |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+ | When installing the library locally (for developing purposes), an error is shown in the browser's developer console: `ERROR TypeError: Cannot read properties of null (reading 'bindingStartIndex')` | You have to activate the preservation of symlinks. Open angular.json file and find options in build in architect and add `"preserveSymlinks": true`
 
 ## Further help
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

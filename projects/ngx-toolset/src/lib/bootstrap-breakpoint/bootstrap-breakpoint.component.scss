@@ -1,0 +1,33 @@
+#bootstrap-breakpoint-component{
+  display: none;
+}
+@media (min-width: 1400px){
+  #bootstrap-breakpoint-component::before{
+    content: "xxl";
+  }
+}
+@media (max-width: 1399px){
+  #bootstrap-breakpoint-component::before{
+    content: "xl";
+  }
+}
+@media (max-width: 1199px){
+  #bootstrap-breakpoint-component::before{
+    content: "lg";
+  }
+}
+@media (max-width: 991px){
+  #bootstrap-breakpoint-component::before{
+    content: "md";
+  }
+}
+@media (max-width: 767px){
+  #bootstrap-breakpoint-component::before{
+    content: "sm";
+  }
+}
+@media (max-width: 575px){
+  #bootstrap-breakpoint-component::before{
+    content: "xs";
+  }
+}
