@@ -94,7 +94,7 @@ export class BootstrapBreakpointComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._matcher.removeEventListener('change', this.handleMediaQueryListEvent.bind(this));
+    this._matcher?.removeEventListener('change', this.handleMediaQueryListEvent.bind(this));
   }
 
 }

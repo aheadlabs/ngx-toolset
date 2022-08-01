@@ -9,6 +9,7 @@
     "copy-library-npmrc-to-dist": "cp projects/ngx-toolset/.npmrc dist/ngx-toolset/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test-automated": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
     "lint": "ng lint"
   },
   "private": true,
