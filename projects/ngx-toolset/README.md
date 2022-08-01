@@ -29,6 +29,26 @@ Run `npm run build-library` to build the project and copy the .npmrc file to the
 #### From library root
 Run `npm run build` to build the project and copy the .npmrc file to the `/dist/` directory.
 
+### Developer tips
+
+#### How to install the library locally
+
+In order to test the behaviour of the library when developing new features, you can install the library from your local workspace using:
+
+`npm install [your_test_project_location]/ngx-toolset/dist/ngx-toolset --save`
+
+
+#### How to check if your test project is using the library locally
+
+To check if the library is being tested from your local code, you can check the package.json and see your local directory in the library package, under `dependencies`:
+
+`"@aheadlabs/ngx-toolset": "file:[your_test_project_location]/_ngx-toolset/dist/ngx-toolset"`
+
+Or from `node_modules` folder, a ![img.png](readme-assets/local_package_icon.png) icon over the package will point that the package is being used locally:
+
+![img.png](readme-assets/local_package.png)
+
+> Note: Don't forget to inject the modules you need into the correspondant module on your project. Otherwise you will not be able to use the library.
 
 ## Publishing
 After building your library with `ng build ngx-toolset`, go to the dist folder `cd dist/ngx-toolset` and run `npm publish`.
