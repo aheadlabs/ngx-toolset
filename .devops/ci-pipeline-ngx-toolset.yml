@@ -44,10 +44,6 @@ jobs:
           script: "pip install devops-toolset"
       # TODO kick off
       # Build and tests
-      - task: CmdLine@2
-        displayName: 'Lint'
-        inputs:
-          script: 'ng lint'
       - task: SonarCloudPrepare@1
         displayName: 'Prepare SonarCloud analysis'
         inputs:
