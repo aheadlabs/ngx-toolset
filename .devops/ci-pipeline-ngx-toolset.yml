@@ -61,7 +61,7 @@ jobs:
       - task: CmdLine@2
         displayName: 'Test'
         inputs:
-          script: 'ng test --code-coverage --watch false'
+          script: 'npm run test-automated'
       - task: SonarCloudAnalyze@1
         displayName: 'Run SonarCloud analysis'
       - task: SonarCloudPublish@1
