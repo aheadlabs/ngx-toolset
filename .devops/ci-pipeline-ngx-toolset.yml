@@ -58,7 +58,7 @@ jobs:
           scannerMode: 'CLI'
           configMode: 'file'
           configFile: '.devops/sonar-project.properties'
-          projectVersion: '0.0.1' # TODO Replace by $(DT_PROJECT_VERSION) after kick off execution
+          projectVersion: '$(DT_PROJECT_VERSION)'
           extraProperties:
       - task: CmdLine@2
         displayName: 'Build'
@@ -80,7 +80,7 @@ jobs:
           scriptSource: 'inline'
           script: |
             import devops_toolset.devops_platforms.sonarx as sonarx
-            sonarx.get_project_quality_gate_status('$(SONARCLOUD_URL)', 'aheadlabs_Signatus', '$(SONARCLOUD_TOKEN)', '$(DT_CURRENT_BRANCH_SIMPLIFIED)')
+            sonarx.get_project_quality_gate_status('$(SONARCLOUD_URL)', '$(SONARCLOUD_PROJECT_KEY)', '$(SONARCLOUD_TOKEN)', '$(DT_CURRENT_BRANCH_SIMPLIFIED)')
           failOnStderr: true
         # TODO Auto tagging
 #      # Publish artifacts
