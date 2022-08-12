@@ -9,6 +9,7 @@
     "copy-library-npmrc-to-dist": "cp projects/ngx-toolset/.npmrc dist/ngx-toolset/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test-automated": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
     "lint": "ng lint"
   },
   "private": true,
@@ -21,6 +22,7 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
+    "@angular/cdk": "^14.1.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

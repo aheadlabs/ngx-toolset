@@ -23,8 +23,6 @@ jobs:
     variables:
       - group: npm
       - group: sonarcloud
-      - name: TestOutputDirectory
-        value: $(Agent.TempDirectory)/testresults
     steps:
       # Set runtime versions
       - task: UsePythonVersion@0
@@ -44,12 +42,14 @@ jobs:
         displayName: 'Install devops-toolset'
         inputs:
           script: "pip install devops-toolset"
-      # TODO kick off
-      # Build and tests
-      - task: CmdLine@2
-        displayName: 'Lint'
+      - task: PythonScript@0
+        displayName: 'Pipeline kick off'
         inputs:
-          script: 'ng lint'
+          scriptSource: 'inline'
+          script: |
+            import devops_toolset.project_types.angular.ci_pipeline_kickoff as ci_pipeline_kickoff
+            ci_pipeline_kickoff.main("azuredevops", "$(Build.SourcesDirectory)/projects/ngx-toolset/package.json", "$(Build.SourceBranch)")
+      # Build and tests
       - task: SonarCloudPrepare@1
         displayName: 'Prepare SonarCloud analysis'
         inputs:
@@ -58,24 +58,30 @@ jobs:
           scannerMode: 'CLI'
           configMode: 'file'
           configFile: '.devops/sonar-project.properties'
-          projectVersion: '0.0.1' # TODO Replace by $(DT_PROJECT_VERSION) after kick off execution
+          projectVersion: '$(DT_PROJECT_VERSION)'
           extraProperties:
       - task: CmdLine@2
         displayName: 'Build'
         inputs:
           script: 'npm run build-library'
-#      - task: CmdLine@2
-#        displayName: 'Test'
-#        inputs:
-#          script: 'ng test --code-coverage --watch false'
-        # TODO Unit tests and coverage report
+      - task: CmdLine@2
+        displayName: 'Test'
+        inputs:
+          script: 'npm run test-automated'
       - task: SonarCloudAnalyze@1
         displayName: 'Run SonarCloud analysis'
       - task: SonarCloudPublish@1
-        displayName: 'Publish quality gate result'
+        displayName: 'Publish quality gate result to SonarCloud'
         inputs:
           pollingTimeoutSec: '300'
-        # TODO Get quality gate results
+      - task: PythonScript@0
+        displayName: 'Get SonarCloud Quality Gate results'
+        inputs:
+          scriptSource: 'inline'
+          script: |
+            import devops_toolset.devops_platforms.sonarx as sonarx
+            sonarx.get_project_quality_gate_status('$(SONARCLOUD_URL)', '$(SONARCLOUD_PROJECT_KEY)', '$(SONARCLOUD_TOKEN)', '$(DT_CURRENT_BRANCH_SIMPLIFIED)')
+          failOnStderr: true
         # TODO Auto tagging
 #      # Publish artifacts
       - task: PublishBuildArtifacts@1
