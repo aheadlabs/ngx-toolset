@@ -29,8 +29,7 @@
           "options": {
             "main": "projects/ngx-toolset/src/test.ts",
             "tsConfig": "projects/ngx-toolset/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-toolset/karma.conf.js",
-            "codeCoverageExclude": ["src/lib/**/*.spec.ts"]
+            "karmaConfig": "projects/ngx-toolset/karma.conf.js"
           }
         },
         "lint": {
