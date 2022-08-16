@@ -82,8 +82,22 @@ jobs:
             import devops_toolset.devops_platforms.sonarx as sonarx
             sonarx.get_project_quality_gate_status('$(SONARCLOUD_URL)', '$(SONARCLOUD_PROJECT_KEY)', '$(SONARCLOUD_TOKEN)', '$(DT_CURRENT_BRANCH_SIMPLIFIED)')
           failOnStderr: true
-        # TODO Auto tagging
-#      # Publish artifacts
+      # Tag version on git
+      - task: CmdLine@2
+        displayName: Add identity to git tagging operation
+        inputs:
+          script: |
+            git config --global user.email "$(Identity.Email)"
+            git config --global user.name "$(Identity.Name)"
+      - task: PythonScript@0
+        displayName: 'Tag version on git (if needed)'
+        inputs:
+          scriptSource: 'inline'
+          script: |
+            import devops_toolset.tools.git as git
+            git.git_tag('$(Build.SourceVersion)', '$(DT_PROJECT_VERSION)', '$(DT_CURRENT_BRANCH_SIMPLIFIED)', 'basic $(Repository.Access.Token)')
+          failOnStderr: true
+      # Publish artifacts
       - task: PublishBuildArtifacts@1
         displayName: 'Publish artifact to Azure Pipelines'
         inputs:
