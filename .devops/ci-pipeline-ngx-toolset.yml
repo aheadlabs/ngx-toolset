@@ -23,6 +23,7 @@ jobs:
     variables:
       - group: npm
       - group: sonarcloud
+      - group: git
     steps:
       # Set runtime versions
       - task: UsePythonVersion@0
