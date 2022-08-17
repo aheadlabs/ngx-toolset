@@ -1,6 +1,6 @@
 {
   "name": "@aheadlabs/ngx-toolset",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Opinionated Angular library that contains common tools and patterns to simplify things and reuse code.",
   "main": "src/public-api.ts",
   "scripts": {
